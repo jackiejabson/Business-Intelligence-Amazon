@@ -1,0 +1,32 @@
+generator client {
+  provider = "prisma-client-py"
+  recursive_type_depth = 5
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("PSQL_URL")
+}
+
+model Tweet {
+  id    String  @id @unique
+  text  String
+
+  created_at DateTime
+
+  retweet_count Int @default(0)
+  reply_count   Int @default(0)
+  like_count    Int @default(0)
+  quote_count   Int @default(0)
+
+  place_id String?
+  place Place? @relation(fields: [place_id], references: [id])
+}
+
+model Place {
+  id       String @id @unique
+  locality String 
+  country  String
+
+  tweets Tweet[]
+}
